@@ -1,1 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeaBlue Blog | 记录学习与思考</title>
+    <style>
+        :root {
+            --bg-1: #e9f7ff;
+            --bg-2: #f8fbef;
+            --bg-3: #fff8f1;
+            --card: rgba(255, 255, 255, 0.86);
+            --text: #173042;
+            --text-soft: #4c6473;
+            --primary: #0f8b8d;
+            --primary-dark: #0a5d61;
+            --accent: #ef7d57;
+            --line: #d6e3e8;
+            --shadow: 0 12px 30px rgba(23, 48, 66, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 500px at 8% -10%, #b7ecf7 0%, transparent 60%),
+                radial-gradient(900px 600px at 100% 10%, #ffe2c8 0%, transparent 58%),
+                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+            min-height: 100vh;
+        }
+
+        .site {
+            width: min(1080px, 92vw);
+            margin: 36px auto 56px;
+            display: grid;
+            gap: 24px;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.72));
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 34px clamp(18px, 3vw, 40px);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.7s ease;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(15, 139, 141, 0.18), transparent 70%);
+            right: -80px;
+            top: -150px;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 620px;
+            color: var(--text-soft);
+            font-size: 1.03rem;
+            line-height: 1.7;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(5px);
+        }
+
+        .composer {
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .composer h2,
+        .archive h2,
+        .posts h2 {
+            margin: 0 0 14px;
+            font-size: 1.12rem;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        input,
+        textarea,
+        select,
+        button {
+            font: inherit;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            color: var(--text);
+            background: #fff;
+        }
+
+        textarea {
+            min-height: 122px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 10px 16px;
+            background: linear-gradient(90deg, var(--primary), #1fa2a5);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: fit-content;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(15, 139, 141, 0.25);
+        }
+
+        .posts {
+            padding: 22px;
+        }
+
+        .post-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .post {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            animation: riseIn 0.35s ease;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .post-title {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .post-date {
+            white-space: nowrap;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            background: #e8f7f7;
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+
+        .post-content {
+            margin: 0;
+            color: var(--text-soft);
+            line-height: 1.75;
+            white-space: pre-wrap;
+        }
+
+        .empty {
+            border: 1px dashed #bfd0d7;
+            border-radius: var(--radius-md);
+            padding: 18px;
+            color: var(--text-soft);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar {
+            display: grid;
+            gap: 16px;
+            position: sticky;
+            top: 18px;
+        }
+
+        .archive {
+            padding: 20px;
+        }
+
+        .archive ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .archive button {
+            width: 100%;
+            text-align: left;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            background: #fff;
+            color: var(--text);
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .archive button:hover,
+        .archive button.active {
+            border-color: var(--primary);
+            transform: translateX(2px);
+            background: #f2fbfb;
+        }
+
+        .tip {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, #fff6d9, #ffeddc);
+            color: #7d4f22;
+            border: 1px solid #ffd9b4;
+            font-size: 0.93rem;
+            line-height: 1.6;
+        }
+
+        .footer {
+            color: #53707f;
+            text-align: center;
+            font-size: 0.9rem;
+            padding-top: 6px;
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .site {
+                width: 94vw;
+                margin-top: 24px;
+            }
+
+            .hero,
+            .composer,
+            .posts,
+            .archive {
+                padding: 16px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .post-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes riseIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="site">
+        <section class="hero card">
+            <h1>SeaBlue 记录站</h1>
+            <p>
+                这是你的个人主页基础版。你可以在这里发布每日学习所得、所思所想，并通过“按日期归档”快速回顾成长轨迹。
+            </p>
+        </section>
+
+        <section class="layout">
+            <div>
+                <article class="composer card">
+                    <h2>发布新帖子</h2>
+                    <form id="postForm" class="form-grid">
+                        <input id="postTitle" type="text" placeholder="标题，例如：今天学了什么" required />
+                        <div class="form-row">
+                            <input id="postDate" type="date" required />
+                            <select id="postMood" aria-label="帖子类型">
+                                <option value="学习笔记">学习笔记</option>
+                                <option value="随想记录">随想记录</option>
+                                <option value="项目进展">项目进展</option>
+                            </select>
+                        </div>
+                        <textarea id="postContent" placeholder="写下今天的学习心得或想法..." required></textarea>
+                        <button class="btn" type="submit">发布帖子</button>
+                    </form>
+                </article>
+
+                <article class="posts card">
+                    <h2>帖子列表</h2>
+                    <div id="postList" class="post-list"></div>
+                </article>
+            </div>
+
+            <aside class="sidebar">
+                <section class="archive card">
+                    <h2>按日期归档</h2>
+                    <ul id="archiveList"></ul>
+                </section>
+                <section class="tip">
+                    提示：当前帖子保存在浏览器本地存储中（`localStorage`）。后续你可以再接入 GitHub Issues、JSON 文件或后端 API 实现真正在线发布。
+                </section>
+            </aside>
+        </section>
+
+        <footer class="footer">
+            <small>© 2026 SeaBlue Blog · 持续学习，持续记录</small>
+        </footer>
+    </main>
+
+    <script>
+        const STORAGE_KEY = "seablue-posts-v1";
+
+        const postForm = document.getElementById("postForm");
+        const postTitle = document.getElementById("postTitle");
+        const postDate = document.getElementById("postDate");
+        const postMood = document.getElementById("postMood");
+        const postContent = document.getElementById("postContent");
+        const postList = document.getElementById("postList");
+        const archiveList = document.getElementById("archiveList");
+
+        let activeArchive = "ALL";
+        let posts = loadPosts();
+
+        if (!posts.length) {
+            posts = [
+                {
+                    id: Date.now().toString(),
+                    title: "欢迎来到我的学习日志",
+                    date: new Date().toISOString().slice(0, 10),
+                    type: "学习笔记",
+                    content: "从今天开始，记录每天学习到的新知识与新想法。",
+                    createdAt: Date.now()
+                }
+            ];
+            savePosts(posts);
+        }
+
+        postDate.value = new Date().toISOString().slice(0, 10);
+        renderAll();
+
+        postForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const title = postTitle.value.trim();
+            const date = postDate.value;
+            const type = postMood.value;
+            const content = postContent.value.trim();
+
+            if (!title || !date || !content) {
+                return;
+            }
+
+            const item = {
+                id: Date.now().toString(),
+                title: `[${type}] ${title}`,
+                date,
+                type,
+                content,
+                createdAt: Date.now()
+            };
+
+            posts.unshift(item);
+            savePosts(posts);
+            postForm.reset();
+            postDate.value = new Date().toISOString().slice(0, 10);
+            activeArchive = getArchiveKey(item.date);
+            renderAll();
+        });
+
+        function loadPosts() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function savePosts(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function getArchiveKey(dateString) {
+            return dateString.slice(0, 7);
+        }
+
+        function getFilteredPosts() {
+            if (activeArchive === "ALL") {
+                return posts;
+            }
+            return posts.filter((post) => getArchiveKey(post.date) === activeArchive);
+        }
+
+        function renderAll() {
+            renderArchives();
+            renderPosts();
+        }
+
+        function renderArchives() {
+            const map = new Map();
+
+            posts.forEach((post) => {
+                const key = getArchiveKey(post.date);
+                map.set(key, (map.get(key) || 0) + 1);
+            });
+
+            const archives = Array.from(map.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+            let html = `
+				<li><button data-archive="ALL" class="${activeArchive === "ALL" ? "active" : ""}">全部 (${posts.length})</button></li>
+			`;
+
+            archives.forEach(([key, count]) => {
+                const label = key.replace("-", "年") + "月";
+                const activeClass = activeArchive === key ? "active" : "";
+                html += `<li><button data-archive="${key}" class="${activeClass}">${label} (${count})</button></li>`;
+            });
+
+            archiveList.innerHTML = html;
+
+            archiveList.querySelectorAll("button").forEach((button) => {
+                button.addEventListener("click", () => {
+                    activeArchive = button.dataset.archive;
+                    renderAll();
+                });
+            });
+        }
+
+        function renderPosts() {
+            const list = getFilteredPosts();
+
+            if (!list.length) {
+                postList.innerHTML = `<div class="empty">该归档下暂无帖子，写下第一篇吧。</div>`;
+                return;
+            }
+
+            postList.innerHTML = list
+                .map((post) => {
+                    return `
+						<article class="post">
+							<header class="post-header">
+								<h3 class="post-title">${escapeHtml(post.title)}</h3>
+								<span class="post-date">${formatDate(post.date)}</span>
+							</header>
+							<p class="post-content">${escapeHtml(post.content)}</p>
+						</article>
+					`;
+                })
+                .join("");
+        }
+
+        function formatDate(dateString) {
+            const [year, month, day] = dateString.split("-");
+            return `${year}年${month}月${day}日`;
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+    </script>
+</body>
+
+</html>
