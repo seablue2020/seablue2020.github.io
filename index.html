@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SeaBlue Blog | 记录学习与思考</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --bg-1: #e9f7ff;
@@ -23,9 +24,7 @@
             --radius-sm: 10px;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -59,29 +58,15 @@
         .hero::after {
             content: "";
             position: absolute;
-            width: 340px;
-            height: 340px;
+            width: 340px; height: 340px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(15, 139, 141, 0.18), transparent 70%);
-            right: -80px;
-            top: -150px;
+            right: -80px; top: -150px;
             pointer-events: none;
         }
 
-        .hero h1 {
-            margin: 0 0 10px;
-            font-size: clamp(1.7rem, 3.2vw, 2.7rem);
-            line-height: 1.2;
-            letter-spacing: 0.01em;
-        }
-
-        .hero p {
-            margin: 0;
-            max-width: 620px;
-            color: var(--text-soft);
-            font-size: 1.03rem;
-            line-height: 1.7;
-        }
+        .hero h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 3.2vw, 2.7rem); line-height: 1.2; }
+        .hero p  { margin: 0; max-width: 620px; color: var(--text-soft); font-size: 1.03rem; line-height: 1.7; }
 
         .layout {
             display: grid;
@@ -98,33 +83,12 @@
             backdrop-filter: blur(5px);
         }
 
-        .composer {
-            padding: 22px;
-            margin-bottom: 18px;
-        }
+        .composer { padding: 22px; margin-bottom: 18px; }
+        .composer h2, .archive h2, .posts h2 { margin: 0 0 14px; font-size: 1.12rem; }
+        .form-grid { display: grid; gap: 10px; }
 
-        .composer h2,
-        .archive h2,
-        .posts h2 {
-            margin: 0 0 14px;
-            font-size: 1.12rem;
-        }
-
-        .form-grid {
-            display: grid;
-            gap: 10px;
-        }
-
-        input,
-        textarea,
-        select,
-        button {
-            font: inherit;
-        }
-
-        input,
-        textarea,
-        select {
+        input, textarea, select, button { font: inherit; }
+        input, textarea, select {
             width: 100%;
             border: 1px solid var(--line);
             border-radius: var(--radius-sm);
@@ -132,50 +96,53 @@
             color: var(--text);
             background: #fff;
         }
-
         textarea {
-            min-height: 122px;
+            min-height: 142px;
             resize: vertical;
             line-height: 1.6;
+            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+            font-size: 0.95rem;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .md-hint {
+            font-size: 0.82rem;
+            color: var(--text-soft);
+            margin: 0;
+            line-height: 1.5;
+        }
+        .md-hint code {
+            background: #eef3f6;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 0.85em;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
+        .btn-row { display: flex; gap: 10px; align-items: center; }
         .btn {
-            border: 0;
-            border-radius: 999px;
-            padding: 10px 16px;
+            border: 0; border-radius: 999px; padding: 10px 16px;
             background: linear-gradient(90deg, var(--primary), #1fa2a5);
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
+            color: #fff; font-weight: 600; cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             width: fit-content;
         }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(15, 139, 141, 0.25);
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(15, 139, 141, 0.25); }
+        .btn-outline {
+            border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px;
+            background: #fff; color: var(--text-soft); cursor: pointer;
+            transition: border-color 0.2s ease;
+            width: fit-content;
         }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-        .posts {
-            padding: 22px;
-        }
-
-        .post-list {
-            display: grid;
-            gap: 12px;
-        }
+        .posts { padding: 22px; }
+        .post-list { display: grid; gap: 16px; }
 
         .post {
             border: 1px solid var(--line);
             background: rgba(255, 255, 255, 0.92);
             border-radius: var(--radius-md);
-            padding: 14px;
+            padding: 18px;
             animation: riseIn 0.35s ease;
         }
 
@@ -184,30 +151,98 @@
             justify-content: space-between;
             align-items: center;
             gap: 10px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #edf2f5;
         }
 
-        .post-title {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 700;
+        .post-title { margin: 0; font-size: 1.08rem; font-weight: 700; }
+
+        .post-meta { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+        .post-tag {
+            font-size: 0.78rem;
+            padding: 2px 9px;
+            border-radius: 999px;
+            font-weight: 500;
         }
+        .tag-学习笔记 { background: #e8f7f7; color: var(--primary-dark); }
+        .tag-随想记录 { background: #fff3e0; color: #b56a1a; }
+        .tag-项目进展 { background: #e8eaf6; color: #3949ab; }
 
         .post-date {
             white-space: nowrap;
             color: var(--primary-dark);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: #e8f7f7;
             padding: 2px 10px;
             border-radius: 999px;
         }
 
         .post-content {
-            margin: 0;
-            color: var(--text-soft);
-            line-height: 1.75;
-            white-space: pre-wrap;
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 0.96rem;
         }
+        .post-content h1, .post-content h2, .post-content h3 {
+            color: var(--text);
+            margin: 1.2em 0 0.5em;
+            line-height: 1.35;
+        }
+        .post-content h1 { font-size: 1.3rem; }
+        .post-content h2 { font-size: 1.15rem; border-bottom: 1px solid #edf2f5; padding-bottom: 6px; }
+        .post-content h3 { font-size: 1.02rem; }
+        .post-content p { margin: 0.6em 0; }
+        .post-content ul, .post-content ol { padding-left: 1.6em; margin: 0.5em 0; }
+        .post-content li { margin: 0.25em 0; }
+        .post-content li input[type="checkbox"] { margin-right: 6px; }
+        .post-content blockquote {
+            margin: 0.8em 0;
+            padding: 10px 16px;
+            border-left: 4px solid var(--primary);
+            background: #f4fafa;
+            border-radius: 0 8px 8px 0;
+            color: var(--text-soft);
+        }
+        .post-content blockquote p { margin: 0.3em 0; }
+        .post-content code {
+            background: #eef3f6;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 0.88em;
+            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+        }
+        .post-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            margin: 0.8em 0;
+            line-height: 1.55;
+        }
+        .post-content pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            font-size: 0.88rem;
+        }
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.8em 0;
+            font-size: 0.93rem;
+        }
+        .post-content th, .post-content td {
+            border: 1px solid var(--line);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .post-content th { background: #f4f8fa; font-weight: 600; }
+        .post-content img { max-width: 100%; border-radius: 8px; }
+        .post-content a { color: var(--primary); text-decoration: none; }
+        .post-content a:hover { text-decoration: underline; }
+        .post-content strong { color: var(--text); }
+        .post-content hr { border: none; border-top: 1px solid #e0e7eb; margin: 1.2em 0; }
 
         .empty {
             border: 1px dashed #bfd0d7;
@@ -218,117 +253,66 @@
             background: rgba(255, 255, 255, 0.7);
         }
 
-        .sidebar {
-            display: grid;
-            gap: 16px;
-            position: sticky;
-            top: 18px;
+        .loading {
+            text-align: center; padding: 30px;
+            color: var(--text-soft); font-size: 0.95rem;
+        }
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid var(--line);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-left: 8px;
         }
 
-        .archive {
-            padding: 20px;
-        }
-
-        .archive ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 8px;
-        }
-
+        .sidebar { display: grid; gap: 16px; position: sticky; top: 18px; }
+        .archive { padding: 20px; }
+        .archive ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
         .archive button {
-            width: 100%;
-            text-align: left;
-            border: 1px solid var(--line);
-            border-radius: var(--radius-sm);
-            background: #fff;
-            color: var(--text);
-            padding: 8px 10px;
-            cursor: pointer;
+            width: 100%; text-align: left;
+            border: 1px solid var(--line); border-radius: var(--radius-sm);
+            background: #fff; color: var(--text);
+            padding: 8px 10px; cursor: pointer;
             transition: border-color 0.2s ease, transform 0.2s ease;
         }
-
-        .archive button:hover,
-        .archive button.active {
+        .archive button:hover, .archive button.active {
             border-color: var(--primary);
             transform: translateX(2px);
             background: #f2fbfb;
         }
 
         .tip {
-            padding: 16px;
-            border-radius: var(--radius-md);
+            padding: 16px; border-radius: var(--radius-md);
             background: linear-gradient(135deg, #fff6d9, #ffeddc);
-            color: #7d4f22;
-            border: 1px solid #ffd9b4;
-            font-size: 0.93rem;
-            line-height: 1.6;
+            color: #7d4f22; border: 1px solid #ffd9b4;
+            font-size: 0.93rem; line-height: 1.6;
+        }
+        .tip code {
+            background: rgba(255,255,255,0.5);
+            padding: 1px 5px; border-radius: 4px;
+            font-size: 0.88em;
         }
 
-        .footer {
-            color: #53707f;
-            text-align: center;
-            font-size: 0.9rem;
-            padding-top: 6px;
-        }
+        .footer { color: #53707f; text-align: center; font-size: 0.9rem; padding-top: 6px; }
 
         @media (max-width: 900px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: static;
-            }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
         }
-
         @media (max-width: 560px) {
-            .site {
-                width: 94vw;
-                margin-top: 24px;
-            }
-
-            .hero,
-            .composer,
-            .posts,
-            .archive {
-                padding: 16px;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .post-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+            .site { width: 94vw; margin-top: 24px; }
+            .hero, .composer, .posts, .archive { padding: 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .post-header { flex-direction: column; align-items: flex-start; }
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes riseIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes riseIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 
@@ -336,9 +320,7 @@
     <main class="site">
         <section class="hero card">
             <h1>SeaBlue 记录站</h1>
-            <p>
-                这是你的个人主页基础版。你可以在这里发布每日学习所得、所思所想，并通过“按日期归档”快速回顾成长轨迹。
-            </p>
+            <p>每日学习所得与所思所想，用 Markdown 书写，按日期归档。</p>
         </section>
 
         <section class="layout">
@@ -355,14 +337,26 @@
                                 <option value="项目进展">项目进展</option>
                             </select>
                         </div>
-                        <textarea id="postContent" placeholder="写下今天的学习心得或想法..." required></textarea>
-                        <button class="btn" type="submit">发布帖子</button>
+                        <textarea id="postContent" placeholder="支持 Markdown 语法，例如：&#10;## 二级标题&#10;- 列表项&#10;**加粗** / *斜体* / `代码`&#10;> 引用&#10;```js&#10;console.log('代码块')&#10;```"></textarea>
+                        <p class="md-hint">
+                            支持 Markdown：<code>**加粗**</code> <code>*斜体*</code> <code>`代码`</code> <code>## 标题</code> <code>- 列表</code> <code>&gt; 引用</code> <code>```代码块```</code>
+                        </p>
+                        <div class="btn-row">
+                            <button class="btn" type="submit">发布帖子</button>
+                            <button class="btn-outline" type="button" id="previewBtn">预览</button>
+                        </div>
                     </form>
+                    <div id="previewArea" style="display:none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line);">
+                        <h3 style="margin: 0 0 8px; font-size: 0.95rem; color: var(--text-soft);">Markdown 预览</h3>
+                        <div id="previewContent" class="post-content"></div>
+                    </div>
                 </article>
 
                 <article class="posts card">
                     <h2>帖子列表</h2>
-                    <div id="postList" class="post-list"></div>
+                    <div id="postList" class="post-list">
+                        <div class="loading">加载帖子中</div>
+                    </div>
                 </article>
             </div>
 
@@ -372,86 +366,148 @@
                     <ul id="archiveList"></ul>
                 </section>
                 <section class="tip">
-                    提示：当前帖子保存在浏览器本地存储中（`localStorage`）。后续你可以再接入 GitHub Issues、JSON 文件或后端 API 实现真正在线发布。
+                    <strong>如何添加新帖子？</strong><br>
+                    在 <code>posts/</code> 目录新建 <code>.md</code> 文件，写上 frontmatter 和 Markdown 内容，然后在 <code>posts/index.json</code> 中添加文件名，推送即可发布。
                 </section>
             </aside>
         </section>
 
         <footer class="footer">
-            <small>© 2026 SeaBlue Blog · 持续学习，持续记录</small>
+            <small>&copy; 2026 SeaBlue Blog &middot; 持续学习，持续记录</small>
         </footer>
     </main>
 
     <script>
-        const STORAGE_KEY = "seablue-posts-v1";
+        const STORAGE_KEY = "seablue-posts-v2";
 
         const postForm = document.getElementById("postForm");
         const postTitle = document.getElementById("postTitle");
         const postDate = document.getElementById("postDate");
         const postMood = document.getElementById("postMood");
         const postContent = document.getElementById("postContent");
-        const postList = document.getElementById("postList");
+        const postListEl = document.getElementById("postList");
         const archiveList = document.getElementById("archiveList");
+        const previewBtn = document.getElementById("previewBtn");
+        const previewArea = document.getElementById("previewArea");
+        const previewContent = document.getElementById("previewContent");
 
         let activeArchive = "ALL";
-        let posts = loadPosts();
+        let allPosts = [];
 
-        if (!posts.length) {
-            posts = [
-                {
-                    id: Date.now().toString(),
-                    title: "欢迎来到我的学习日志",
-                    date: new Date().toISOString().slice(0, 10),
-                    type: "学习笔记",
-                    content: "从今天开始，记录每天学习到的新知识与新想法。",
-                    createdAt: Date.now()
-                }
-            ];
-            savePosts(posts);
-        }
+        marked.setOptions({ breaks: true, gfm: true });
 
         postDate.value = new Date().toISOString().slice(0, 10);
-        renderAll();
 
-        postForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-
-            const title = postTitle.value.trim();
-            const date = postDate.value;
-            const type = postMood.value;
-            const content = postContent.value.trim();
-
-            if (!title || !date || !content) {
-                return;
+        previewBtn.addEventListener("click", function() {
+            var isVisible = previewArea.style.display !== "none";
+            if (isVisible) {
+                previewArea.style.display = "none";
+                previewBtn.textContent = "预览";
+            } else {
+                previewContent.innerHTML = marked.parse(postContent.value || "*还没有写内容...*");
+                previewArea.style.display = "block";
+                previewBtn.textContent = "关闭预览";
             }
+        });
 
-            const item = {
+        (async function() {
+            var mdPosts = await loadMarkdownPosts();
+            var localPosts = loadLocalPosts();
+            allPosts = localPosts.concat(mdPosts);
+            allPosts.sort(function(a, b) { return b.date.localeCompare(a.date) || b.createdAt - a.createdAt; });
+            renderAll();
+        })();
+
+        postForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            var title = postTitle.value.trim();
+            var date = postDate.value;
+            var type = postMood.value;
+            var content = postContent.value.trim();
+            if (!title || !date || !content) return;
+
+            var item = {
                 id: Date.now().toString(),
-                title: `[${type}] ${title}`,
-                date,
-                type,
-                content,
+                title: title,
+                date: date,
+                type: type,
+                content: content,
+                source: "local",
                 createdAt: Date.now()
             };
 
-            posts.unshift(item);
-            savePosts(posts);
+            var localPosts = loadLocalPosts();
+            localPosts.unshift(item);
+            saveLocalPosts(localPosts);
+
+            allPosts.unshift(item);
             postForm.reset();
             postDate.value = new Date().toISOString().slice(0, 10);
+            previewArea.style.display = "none";
+            previewBtn.textContent = "预览";
             activeArchive = getArchiveKey(item.date);
             renderAll();
         });
 
-        function loadPosts() {
+        async function loadMarkdownPosts() {
             try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                return raw ? JSON.parse(raw) : [];
-            } catch {
+                var res = await fetch("posts/index.json");
+                if (!res.ok) return [];
+                var fileList = await res.json();
+                var posts = await Promise.all(
+                    fileList.map(async function(filename) {
+                        try {
+                            var r = await fetch("posts/" + filename);
+                            if (!r.ok) return null;
+                            var text = await r.text();
+                            return parseMarkdownPost(text, filename);
+                        } catch(e) { return null; }
+                    })
+                );
+                return posts.filter(Boolean);
+            } catch(e) {
                 return [];
             }
         }
 
-        function savePosts(data) {
+        function parseMarkdownPost(raw, filename) {
+            var fmMatch = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+            if (!fmMatch) {
+                return {
+                    id: "md-" + filename,
+                    title: filename.replace(/\.md$/, ""),
+                    date: filename.slice(0, 10),
+                    type: "学习笔记",
+                    content: raw,
+                    source: "md",
+                    createdAt: new Date(filename.slice(0, 10)).getTime()
+                };
+            }
+            var frontmatter = fmMatch[1];
+            var body = fmMatch[2];
+            function get(key) {
+                var m = frontmatter.match(new RegExp("^" + key + ":\\s*(.+)$", "m"));
+                return m ? m[1].trim() : "";
+            }
+            return {
+                id: "md-" + filename,
+                title: get("title") || filename.replace(/\.md$/, ""),
+                date: get("date") || filename.slice(0, 10),
+                type: get("type") || "学习笔记",
+                content: body.trim(),
+                source: "md",
+                createdAt: new Date(get("date") || filename.slice(0, 10)).getTime()
+            };
+        }
+
+        function loadLocalPosts() {
+            try {
+                var raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch(e) { return []; }
+        }
+
+        function saveLocalPosts(data) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         }
 
@@ -460,10 +516,8 @@
         }
 
         function getFilteredPosts() {
-            if (activeArchive === "ALL") {
-                return posts;
-            }
-            return posts.filter((post) => getArchiveKey(post.date) === activeArchive);
+            if (activeArchive === "ALL") return allPosts;
+            return allPosts.filter(function(p) { return getArchiveKey(p.date) === activeArchive; });
         }
 
         function renderAll() {
@@ -472,69 +526,59 @@
         }
 
         function renderArchives() {
-            const map = new Map();
-
-            posts.forEach((post) => {
-                const key = getArchiveKey(post.date);
+            var map = new Map();
+            allPosts.forEach(function(p) {
+                var key = getArchiveKey(p.date);
                 map.set(key, (map.get(key) || 0) + 1);
             });
-
-            const archives = Array.from(map.entries()).sort((a, b) => b[0].localeCompare(a[0]));
-            let html = `
-				<li><button data-archive="ALL" class="${activeArchive === "ALL" ? "active" : ""}">全部 (${posts.length})</button></li>
-			`;
-
-            archives.forEach(([key, count]) => {
-                const label = key.replace("-", "年") + "月";
-                const activeClass = activeArchive === key ? "active" : "";
-                html += `<li><button data-archive="${key}" class="${activeClass}">${label} (${count})</button></li>`;
+            var archives = Array.from(map.entries()).sort(function(a, b) { return b[0].localeCompare(a[0]); });
+            var html = '<li><button data-archive="ALL" class="' + (activeArchive === "ALL" ? "active" : "") + '">全部 (' + allPosts.length + ')</button></li>';
+            archives.forEach(function(entry) {
+                var key = entry[0], count = entry[1];
+                var label = key.replace("-", "年") + "月";
+                var cls = activeArchive === key ? "active" : "";
+                html += '<li><button data-archive="' + escAttr(key) + '" class="' + cls + '">' + escHtml(label) + ' (' + count + ')</button></li>';
             });
-
             archiveList.innerHTML = html;
-
-            archiveList.querySelectorAll("button").forEach((button) => {
-                button.addEventListener("click", () => {
-                    activeArchive = button.dataset.archive;
+            archiveList.querySelectorAll("button").forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    activeArchive = btn.dataset.archive;
                     renderAll();
                 });
             });
         }
 
         function renderPosts() {
-            const list = getFilteredPosts();
-
+            var list = getFilteredPosts();
             if (!list.length) {
-                postList.innerHTML = `<div class="empty">该归档下暂无帖子，写下第一篇吧。</div>`;
+                postListEl.innerHTML = '<div class="empty">该归档下暂无帖子，写下第一篇吧。</div>';
                 return;
             }
-
-            postList.innerHTML = list
-                .map((post) => {
-                    return `
-						<article class="post">
-							<header class="post-header">
-								<h3 class="post-title">${escapeHtml(post.title)}</h3>
-								<span class="post-date">${formatDate(post.date)}</span>
-							</header>
-							<p class="post-content">${escapeHtml(post.content)}</p>
-						</article>
-					`;
-                })
-                .join("");
+            postListEl.innerHTML = list.map(function(post) {
+                return '<article class="post">' +
+                    '<header class="post-header">' +
+                        '<h3 class="post-title">' + escHtml(post.title) + '</h3>' +
+                        '<div class="post-meta">' +
+                            '<span class="post-tag tag-' + escAttr(post.type) + '">' + escHtml(post.type) + '</span>' +
+                            '<span class="post-date">' + formatDate(post.date) + '</span>' +
+                        '</div>' +
+                    '</header>' +
+                    '<div class="post-content">' + marked.parse(post.content) + '</div>' +
+                '</article>';
+            }).join("");
         }
 
         function formatDate(dateString) {
-            const [year, month, day] = dateString.split("-");
-            return `${year}年${month}月${day}日`;
+            var parts = dateString.split("-");
+            return parts[0] + "年" + parts[1] + "月" + parts[2] + "日";
         }
 
-        function escapeHtml(text) {
-            return text
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
+        function escHtml(text) {
+            return text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+        }
+
+        function escAttr(text) {
+            return text.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
         }
     </script>
 </body>
